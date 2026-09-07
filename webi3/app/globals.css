@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0f;
+  --violet: #8b5cf6;
+  --blue: #3b82f6;
+  --green: #10e0a0;
+  --gold: #f5c542;
+  --text: #ededf2;
+  --muted: #a1a1b5;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+@layer utilities {
+  .glass {
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
+    backdrop-filter: blur(12px);
+  }
+}
