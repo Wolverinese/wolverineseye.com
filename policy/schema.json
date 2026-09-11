@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wolverineseye.com/policy/schema.json",
+  "title": "PolicyDecision",
+  "description": "Binding contract for the structured decision returned by the shox semantic policy gate (wrapped /v1/chat call) to webi3-website. See PHASE_1.md section 2.4.",
+  "type": "object",
+  "required": ["decision", "reason_code", "model", "policy_version"],
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "type": "string",
+      "description": "The policy taxonomy outcome. Fixed, closed set for Phase 1.",
+      "enum": ["ALLOW", "REFUSE", "REVIEW"]
+    },
+    "reason_code": {
+      "type": "string",
+      "description": "Short machine-readable category explaining the decision. Must be one of the fixed vocabulary values below.",
+      "enum": [
+        "OK",
+        "HARASSMENT",
+        "HATE_SPEECH",
+        "VIOLENCE_OR_THREATS",
+        "SELF_HARM",
+        "SEXUAL_CONTENT_MINORS",
+        "SEXUAL_CONTENT_ADULT",
+        "ILLEGAL_ACTIVITY",
+        "MALWARE_OR_EXPLOITS",
+        "PRIVACY_VIOLATION",
+        "SPAM_OR_ABUSE",
+        "PROMPT_INJECTION_ATTEMPT",
+        "MISINFORMATION",
+        "IP_INFRINGEMENT",
+        "AMBIGUOUS_INTENT",
+        "INSUFFICIENT_CONTEXT",
+        "CLASSIFIER_ERROR"
+      ]
+    },
+    "explanation": {
+      "type": "string",
+      "description": "Optional, human-readable, truncated explanation for audit/support review. Never shown to end users as the sole moderation message.",
+      "maxLength": 500
+    },
+    "model": {
+      "type": "string",
+      "description": "The resolved model id from shox that produced this decision (for provenance)."
+    },
+    "policy_version": {
+      "type": "string",
+      "description": "Version of the policy taxonomy/system prompt that produced this decision. See policy/policy-version.md.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "decision": { "const": "ALLOW" } }
+      },
+      "then": {
+        "properties": { "reason_code": { "const": "OK" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "decision": { "const": "REVIEW" } }
+      },
+      "then": {
+        "properties": {
+          "reason_code": {
+            "enum": ["AMBIGUOUS_INTENT", "INSUFFICIENT_CONTEXT", "CLASSIFIER_ERROR"]
+          }
+        }
+      }
+    }
+  ]
+}

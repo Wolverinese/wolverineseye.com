@@ -5,6 +5,13 @@
 **Timeline:** 4 weeks
 **Guiding principle (V2):** "The gate decides, not the model." The policy decision is produced by a governed call into shox, kept separate from the application/model logic that consumes it.
 
+**Status:** Week 1 foundations (taxonomy/schema + classifier system prompt) are implemented in this repo under [`policy/`](policy/):
+- [`policy/schema.json`](policy/schema.json) — the `PolicyDecision` JSON Schema contract (taxonomy + reason codes)
+- [`policy/system-prompt.md`](policy/system-prompt.md) — the versioned Policy Classifier persona prompt
+- [`policy/policy-version.md`](policy/policy-version.md) — the `policy_version` scheme
+
+Scaffolding `lib/policy/` inside `webi3-website` (Week 2 integration) is blocked pending confirmation of whether `webi3-website`/`shox` are separate repositories or should live inside `wolverineseye.com`.
+
 ---
 
 ## 1. Why Option 2
@@ -43,7 +50,8 @@ Defines how the classifier arrives at a decision.
 ### 2.4 Evaluation
 Defines the contract and quality bar for the decision itself.
 
-- **Structured output contract (JSON):**
+- **Structured output contract (JSON):** formally defined as a JSON Schema in
+  [`policy/schema.json`](policy/schema.json), reproduced here for reference:
   ```json
   {
     "decision": "ALLOW | REFUSE | REVIEW",
@@ -53,8 +61,9 @@ Defines the contract and quality bar for the decision itself.
     "policy_version": "string"
   }
   ```
-- **Validation layer:** webi3-website must validate shox's response against this schema before trusting it. Any malformed/non-conforming response defaults to `REVIEW` (fail-safe, never fail-open to `ALLOW`).
-- **Versioning:** The system prompt/policy taxonomy is versioned (`policy_version`) so decisions remain reproducible and comparable as the prompt evolves.
+- **Validation layer:** webi3-website must validate shox's response against [`policy/schema.json`](policy/schema.json) before trusting it. Any malformed/non-conforming response defaults to `REVIEW` (fail-safe, never fail-open to `ALLOW`).
+- **Versioning:** The system prompt/policy taxonomy is versioned (`policy_version`) per the scheme in [`policy/policy-version.md`](policy/policy-version.md), so decisions remain reproducible and comparable as the prompt evolves.
+- **Classifier system prompt:** the fixed, versioned persona prompt used to wrap `/v1/chat` is defined in [`policy/system-prompt.md`](policy/system-prompt.md), including prompt-injection resistance rules and decoding parameters.
 
 ---
 
@@ -124,9 +133,9 @@ shox/
 ## 6. Implementation Roadmap (4 Weeks)
 
 **Week 1 — Foundations**
-- Define policy taxonomy, JSON decision schema, and `policy_version` scheme.
-- Draft and review the classifier system prompt with shox.
-- Scaffold `lib/policy/` (client, schema, types, systemPrompt) in webi3-website.
+- [x] Define policy taxonomy, JSON decision schema, and `policy_version` scheme — see [`policy/schema.json`](policy/schema.json) and [`policy/policy-version.md`](policy/policy-version.md).
+- [x] Draft and review the classifier system prompt with shox — see [`policy/system-prompt.md`](policy/system-prompt.md).
+- [ ] Scaffold `lib/policy/` (client, schema, types, systemPrompt) in webi3-website — **blocked**: pending confirmation of whether `webi3-website`/`shox` are separate repos or should be scaffolded inside `wolverineseye.com`.
 
 **Week 2 — Integration**
 - Implement `POST /api/policy` route calling shox `/v1/chat` via `client.ts`.
