@@ -5,12 +5,21 @@
 **Timeline:** 4 weeks
 **Guiding principle (V2):** "The gate decides, not the model." The policy decision is produced by a governed call into shox, kept separate from the application/model logic that consumes it.
 
-**Status:** Week 1 foundations (taxonomy/schema + classifier system prompt) are implemented in this repo under [`policy/`](policy/):
+**Status:** Week 1 foundations (taxonomy/schema + classifier system prompt) and Week 2 integration
+(Next.js scaffolding of `webi3-website` inside this repo) are implemented:
 - [`policy/schema.json`](policy/schema.json) — the `PolicyDecision` JSON Schema contract (taxonomy + reason codes)
 - [`policy/system-prompt.md`](policy/system-prompt.md) — the versioned Policy Classifier persona prompt
 - [`policy/policy-version.md`](policy/policy-version.md) — the `policy_version` scheme
+- [`lib/policy/`](lib/policy/) — TypeScript client, schema validation, system prompt, and types
+- [`lib/logging/policyLog.ts`](lib/logging/policyLog.ts) — audit log writer
+- [`app/api/policy/route.ts`](app/api/policy/route.ts) — the `POST /api/policy` server route
 
-Scaffolding `lib/policy/` inside `webi3-website` (Week 2 integration) is blocked pending confirmation of whether `webi3-website`/`shox` are separate repositories or should live inside `wolverineseye.com`.
+**Assumption:** since no separate `webi3-website`/`shox` repository was identified, this repo
+(`wolverineseye.com`) is treated as the home for `webi3-website`, consistent with the README's
+existing `/webi3` route. `shox` itself is a separate, externally-operated service reached via the
+`SHOX_BASE_URL`/`SHOX_POLICY_API_KEY` environment variables (see `.env.example`) — no shox source
+lives in this repo. If this assumption is wrong, `lib/policy/` and `app/api/policy/route.ts` are
+straightforward to relocate.
 
 ---
 
@@ -135,19 +144,20 @@ shox/
 **Week 1 — Foundations**
 - [x] Define policy taxonomy, JSON decision schema, and `policy_version` scheme — see [`policy/schema.json`](policy/schema.json) and [`policy/policy-version.md`](policy/policy-version.md).
 - [x] Draft and review the classifier system prompt with shox — see [`policy/system-prompt.md`](policy/system-prompt.md).
-- [ ] Scaffold `lib/policy/` (client, schema, types, systemPrompt) in webi3-website — **blocked**: pending confirmation of whether `webi3-website`/`shox` are separate repos or should be scaffolded inside `wolverineseye.com`.
+- [x] Scaffold `lib/policy/` (client, schema, types, systemPrompt) in webi3-website — implemented in this repo, treated as the webi3-website home (see Status note above).
 
 **Week 2 — Integration**
-- Implement `POST /api/policy` route calling shox `/v1/chat` via `client.ts`.
-- Implement fail-safe defaulting (`REVIEW` on error/invalid response).
-- Wire audit logging (`policyLog.ts`).
+- [x] Implement `POST /api/policy` route calling shox `/v1/chat` via `client.ts` — see [`app/api/policy/route.ts`](app/api/policy/route.ts).
+- [x] Implement fail-safe defaulting (`REVIEW`/`CLASSIFIER_ERROR` on error/invalid response) — see [`lib/policy/client.ts`](lib/policy/client.ts).
+- [x] Wire audit logging (`policyLog.ts`) — see [`lib/logging/policyLog.ts`](lib/logging/policyLog.ts).
+- [x] Unit tests for schema validation and fail-safe client behavior — see [`lib/policy/__tests__/`](lib/policy/__tests__/) (17 tests, run via `npm test`).
 
 **Week 3 — Testing & Hardening**
-- Build labeled test set (benign / violating / ambiguous prompts).
-- Write and run unit + integration tests; measure classification accuracy.
-- Prompt-injection spot checks; tune system prompt/decoding parameters as needed.
+- [ ] Build labeled test set (benign / violating / ambiguous prompts).
+- [ ] Run integration tests against a real/stubbed shox instance; measure classification accuracy.
+- [ ] Prompt-injection spot checks against a live model; tune system prompt/decoding parameters as needed.
 
 **Week 4 — Rollout**
-- Hook policy gate into target application paths (e.g., contact/chat entry points) via `middleware.ts`.
-- Staged rollout (shadow mode → enforced) with monitoring on decision distribution and audit log volume.
-- Document handoff notes for a future Phase 2 evaluation of a native shox `/v1/policy` endpoint.
+- [ ] Hook policy gate into target application paths (e.g., contact/chat entry points) via `middleware.ts`.
+- [ ] Staged rollout (shadow mode → enforced) with monitoring on decision distribution and audit log volume.
+- [ ] Document handoff notes for a future Phase 2 evaluation of a native shox `/v1/policy` endpoint.
