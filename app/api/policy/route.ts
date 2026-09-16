@@ -10,12 +10,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { classifyMessage } from "@/lib/policy/client";
 import { logPolicyDecision } from "@/lib/logging/policyLog";
-import type { PolicyRequest } from "@/lib/policy/types";
 
 export async function POST(request: NextRequest) {
-  let body: PolicyRequest;
+  let body: unknown;
   try {
-    body = (await request.json()) as PolicyRequest;
+    body = await request.json();
   } catch {
     return NextResponse.json(
       { error: "Request body must be valid JSON." },
@@ -23,7 +22,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (typeof body.message !== "string" || body.message.trim().length === 0) {
+  if (
+    typeof body !== "object" ||
+    body === null ||
+    Array.isArray(body) ||
+    !("message" in body) ||
+    typeof body.message !== "string" ||
+    body.message.trim().length === 0
+  ) {
     return NextResponse.json(
       { error: "`message` is required and must be a non-empty string." },
       { status: 400 },

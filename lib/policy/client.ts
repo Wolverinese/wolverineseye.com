@@ -84,13 +84,20 @@ export async function classifyMessage(
       return fallbackReview("unknown");
     }
 
-    const body = (await response.json()) as {
-      model?: string;
-      content?: string;
-    };
-    const resolvedModel = body.model ?? "unknown";
+    const body: unknown = await response.json();
+    if (
+      typeof body !== "object" ||
+      body === null ||
+      Array.isArray(body) ||
+      !("model" in body) ||
+      typeof body.model !== "string" ||
+      body.model.trim().length === 0
+    ) {
+      return fallbackReview("unknown");
+    }
+    const resolvedModel = body.model;
 
-    if (typeof body.content !== "string") {
+    if (!("content" in body) || typeof body.content !== "string") {
       return fallbackReview(resolvedModel);
     }
 
@@ -102,7 +109,7 @@ export async function classifyMessage(
     }
 
     const decision = parseModelDecision(parsedContent);
-    if (!decision) {
+    if (!decision || decision.policy_version !== POLICY_PROMPT_VERSION) {
       return fallbackReview(resolvedModel);
     }
 

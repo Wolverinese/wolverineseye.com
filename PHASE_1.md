@@ -5,8 +5,8 @@
 **Timeline:** 4 weeks
 **Guiding principle (V2):** "The gate decides, not the model." The policy decision is produced by a governed call into shox, kept separate from the application/model logic that consumes it.
 
-**Status:** Week 1 foundations (taxonomy/schema + classifier system prompt) and Week 2 integration
-(Next.js scaffolding of `webi3-website` inside this repo) are implemented:
+**Status:** Experimental scaffold. Week 1 foundations and Week 2 client/route
+code exist; successful end-to-end integration has not been established:
 - [`policy/schema.json`](policy/schema.json) — the `PolicyDecision` JSON Schema contract (taxonomy + reason codes)
 - [`policy/system-prompt.md`](policy/system-prompt.md) — the versioned Policy Classifier persona prompt
 - [`policy/policy-version.md`](policy/policy-version.md) — the `policy_version` scheme
@@ -14,12 +14,34 @@
 - [`lib/logging/policyLog.ts`](lib/logging/policyLog.ts) — audit log writer
 - [`app/api/policy/route.ts`](app/api/policy/route.ts) — the `POST /api/policy` server route
 
-**Assumption:** since no separate `webi3-website`/`shox` repository was identified, this repo
-(`wolverineseye.com`) is treated as the home for `webi3-website`, consistent with the README's
-existing `/webi3` route. `shox` itself is a separate, externally-operated service reached via the
+**Repository scope:** this repo (`wolverineseye.com`) currently hosts the
+experimental policy wrapper. The README's `/webi3` route is planned, not implemented.
+This scaffold does not establish ownership of the broader Webi3 platform.
+`shox` is a separate service reached via the
 `SHOX_BASE_URL`/`SHOX_POLICY_API_KEY` environment variables (see `.env.example`) — no shox source
 lives in this repo. If this assumption is wrong, `lib/policy/` and `app/api/policy/route.ts` are
 straightforward to relocate.
+
+### Integration requirements and release blockers
+
+The client currently expects `POST /v1/chat` to accept a `messages` array with
+separate system and user roles and decoding parameters, then return
+`{ model: string, content: string }`. A router accepting only `{ message }` and
+returning `{ answer, model, ... }` is not compatible: the request will fail or the
+response will become `REVIEW / CLASSIFIER_ERROR`.
+
+Before enabling this integration, verify role separation, request/response fields,
+decoding support, caller authentication and allowed provider destinations against
+the deployed service. Sending a bearer header does not prove the service verifies
+it. Sending decoding parameters does not prove it enforces them. Do not concatenate
+the policy instructions and untrusted content into one user message as a silent
+compatibility workaround. Model classification is advisory evidence; it is not
+human approval or constitutional authority.
+
+The API route also needs an explicit caller-access and rate-limit strategy before
+public exposure. Logging writes metadata to stdout; durable retention is not yet
+implemented. Live-model accuracy, prompt-injection resistance and deployment
+readiness remain unverified.
 
 ---
 
@@ -143,14 +165,14 @@ shox/
 
 **Week 1 — Foundations**
 - [x] Define policy taxonomy, JSON decision schema, and `policy_version` scheme — see [`policy/schema.json`](policy/schema.json) and [`policy/policy-version.md`](policy/policy-version.md).
-- [x] Draft and review the classifier system prompt with shox — see [`policy/system-prompt.md`](policy/system-prompt.md).
+- [x] Draft the classifier system prompt — see [`policy/system-prompt.md`](policy/system-prompt.md); live-service validation remains open.
 - [x] Scaffold `lib/policy/` (client, schema, types, systemPrompt) in webi3-website — implemented in this repo, treated as the webi3-website home (see Status note above).
 
 **Week 2 — Integration**
 - [x] Implement `POST /api/policy` route calling shox `/v1/chat` via `client.ts` — see [`app/api/policy/route.ts`](app/api/policy/route.ts).
 - [x] Implement fail-safe defaulting (`REVIEW`/`CLASSIFIER_ERROR` on error/invalid response) — see [`lib/policy/client.ts`](lib/policy/client.ts).
 - [x] Wire audit logging (`policyLog.ts`) — see [`lib/logging/policyLog.ts`](lib/logging/policyLog.ts).
-- [x] Unit tests for schema validation and fail-safe client behavior — see [`lib/policy/__tests__/`](lib/policy/__tests__/) (17 tests, run via `npm test`).
+- [x] Unit tests for schema validation, fail-safe client behavior and route input validation — run `npm test` for the current result.
 
 **Week 3 — Testing & Hardening**
 - [ ] Build labeled test set (benign / violating / ambiguous prompts).
