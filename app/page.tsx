@@ -1,57 +1,35 @@
 import Link from "next/link";
 
-const principles = [
-  ["01", "Identity over trends"],
-  ["02", "Timelessness over convenience"],
-  ["03", "Luxury through restraint"],
-  ["04", "Story before aesthetics"],
-  ["05", "Consistency compounds"],
-  ["06", "Technology serves creativity"],
-  ["07", "Build for decades"],
+const laws = [
+  ["01", "Intelligence precedes embodiment", "Simulation, evaluation and supervised software operation come before physical actuation."],
+  ["02", "Identity is portable but permissioned", "Identity can move between runtimes only through approved adapters and revocable access."],
+  ["03", "Sovereignty requires accountability", "User control and freedom from provider lock-in never means freedom from responsibility."],
+  ["04", "Culture is training data with dignity", "Auckland, Dhaka, music, language and memory are sources of meaning, not decoration."],
+  ["05", "Myth and product remain distinguishable", "Story can widen the horizon. Technical claims must remain inspectable."],
 ] as const;
 
-const atmospheres = ["Quiet confidence", "Wonder", "Presence", "Dignity", "Hope"];
-
-const doors = [
-  ["Music", "Sound as memory.", "/music"],
-  ["Art", "Images with a reason to exist.", "/art"],
-  ["Webi3", "The company operating layer.", "/webi3"],
-  ["Archive", "What deserves to survive.", "/archive"],
-] as const;
+const layers = [
+  ["WOS", "Philosophy, constitutional rules, classification and human authority", "WORKING DRAFT"],
+  ["Webi3 Quantum Lab", "Parent architecture for AI, OS, agents, $hoX and future embodiment", "ORGANISING FRAME"],
+  ["$hoX", "Governed intelligence that routes models, memory, policy and tools", "ARCHITECTURE DEFINED"],
+  ["MCP / RAG / TOOLS", "Approved capabilities with provenance, scope and revocation", "CAPABILITY LAYER"],
+];
 
 export default function Home() {
-  return (
-    <main className="site">
-      <header className="top">
-        <Link className="mark" href="/">Wolverines<span>Eye</span></Link>
-        <nav aria-label="Primary"><a href="#philosophy">Philosophy</a><a href="#doors">Explore</a><a href="#archive">Archive</a></nav>
-        <span className="edition">BOOK I / 0.1</span>
-      </header>
+  return <main className="site">
+    <header className="top"><Link className="mark" href="/"><span className="mark-glyph">◆</span> $hoX</Link><span className="system-name">WOS ENGINEERING REFERENCE</span><nav aria-label="Primary"><a href="#laws">Laws</a><a href="#architecture">Architecture</a><a href="#archive">Archive</a></nav><span className="edition">WOS / 0001</span></header>
 
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="hero-copy">
-          <p className="eyebrow">A living culture &amp; IP house · Aotearoa New Zealand</p>
-          <h1 id="hero-title">Make work<br /><em>that endures.</em></h1>
-          <p className="lede">Wolverines is a home for music, art, technology and ideas held in trust. We make with identity, restraint and a long memory.</p>
-          <div className="hero-actions"><Link className="button button-primary" href="/philosophy">Read the philosophy <span>↗</span></Link><a className="text-link" href="#doors">Enter the house <span>↓</span></a></div>
-        </div>
-        <div className="hero-mark" aria-hidden="true"><span>W</span><small>THE WITNESS</small></div>
-      </section>
+    <section className="hero" aria-labelledby="hero-title"><div className="hero-copy"><p className="eyebrow">WOS-SHOX-0001 · CURRENT-STATE WORKING EDITION V0.3 · 6 AUGUST 2026</p><h1 id="hero-title">The Constitution<br /><em>is working.</em></h1><p className="lede">WOS is the design and governance operating system above Wolverines Eye and Webi3 Quantum Lab: a way to make identity, intelligence and culture durable without surrendering human authority.</p><div className="hero-actions"><Link className="button button-primary" href="/philosophy">Read the constitution <span>↗</span></Link><a className="text-link" href="#laws">Inspect the system <span>↓</span></a></div></div><div className="hero-mark" aria-hidden="true"><span>W</span><small>WOS ON TOP</small></div></section>
 
-      <section className="signal" aria-label="Wolverines statement"><p>IDENTITY</p><span>×</span><p>CRAFT</p><span>×</span><p>STEWARDSHIP</p></section>
+    <section className="baseline" aria-label="Evidence baseline"><div><span>01</span><strong>79</strong><p>inventory items classified</p></div><div><span>02</span><strong>5</strong><p>primary constitutional laws</p></div><div><span>03</span><strong>1</strong><p>identity, many runtimes</p></div><div><span>04</span><strong>∞</strong><p>stewardship horizon</p></div></section>
 
-      <section className="philosophy" id="philosophy" aria-labelledby="philosophy-title">
-        <div className="section-label"><span>01</span><span>THE FOUNDATION</span></div>
-        <div className="philosophy-grid"><div><h2 id="philosophy-title">A point of view<br />before a <em>point of sale.</em></h2><p className="body-copy">The wolf is never the hero; it is the witness. Every piece begins with a human centre, then earns its surface through care.</p></div><div className="principles">{principles.map(([number, text]) => <div className="principle" key={number}><span>{number}</span><strong>{text}</strong></div>)}</div></div>
-      </section>
+    <section className="intro"><div className="section-label"><span>§ 00</span><span>THE OPERATING PRINCIPLE</span></div><div className="intro-grid"><h2>One signal.<br /><em>One system.</em><br />One awakening.</h2><p>WOS is not a visual skin and $hoX is not a personality cult. The Constitution sits above models, interfaces and vendors. It protects the meaning of the work while the tools change beneath it.</p></div></section>
 
-      <section className="atmosphere" aria-labelledby="atmosphere-title"><div className="section-label"><span>02</span><span>THE FEELING</span></div><div className="atmosphere-heading"><h2 id="atmosphere-title">How the work<br /><em>should feel.</em></h2><p>Five atmospheres guide the work. Not a moodboard — a standard.</p></div><div className="atmosphere-list">{atmospheres.map((item, index) => <div key={item}><span>0{index + 1}</span><strong>{item}</strong><i>↗</i></div>)}</div></section>
+    <section className="laws" id="laws" aria-labelledby="laws-title"><div className="section-label"><span>§ 01</span><span>THE INVARIANTS</span></div><div className="section-heading"><h2 id="laws-title">The Five Laws<br /><em>of $hoX.</em></h2><p>A model that repeatedly violates these laws is not $hoX, even if it uses the name, voice and interface.</p></div><div className="law-list">{laws.map(([number, title, description]) => <article className="law" key={number}><span className="law-number">{number}</span><div><h3>{title}</h3><p>{description}</p></div><span className="law-arrow">↗</span></article>)}</div></section>
 
-      <section className="doors" id="doors" aria-labelledby="doors-title"><div className="section-label"><span>03</span><span>THE HOUSE</span></div><div className="doors-heading"><h2 id="doors-title">Different rooms.<br /><em>One character.</em></h2><p>Move through the ecosystem. Each door opens to a different form of the same belief.</p></div><div className="door-grid">{doors.map(([label, blurb, href], index) => <Link href={href} className="door-card" key={label}><span>0{index + 1}</span><h3>{label}</h3><p>{blurb}</p><b>↗</b></Link>)}</div></section>
+    <section className="architecture" id="architecture" aria-labelledby="architecture-title"><div className="section-label"><span>§ 02</span><span>THE STACK</span></div><div className="section-heading"><h2 id="architecture-title">WOS on top.<br /><em>Everything else below.</em></h2><p>The router chooses. MCP connects. The model reasons. The tool acts. Authority flows down; evidence flows up.</p></div><div className="layer-list">{layers.map(([name, description, status], index) => <div className="layer" key={name}><span>0{index + 1}</span><div><h3>{name}</h3><p>{description}</p></div><b>{status}</b></div>)}</div></section>
 
-      <section className="archive" id="archive" aria-labelledby="archive-title"><div><p className="eyebrow">A book held in trust · Review edition 0.1</p><h2 id="archive-title">Read what<br /><em>must survive.</em></h2></div><div><p>The Philosophy is our first record of why the work exists, what it owes to people, and what should remain true when the tools change.</p><Link className="button button-light" href="/philosophy">Open Book I <span>↗</span></Link></div></section>
-
-      <footer className="foot"><p>Wolverines Eye Limited <span>·</span> Aotearoa New Zealand</p><p>Stewardship outlives ownership.</p></footer>
-    </main>
-  );
+    <section className="archive" id="archive"><div><p className="eyebrow">A controlled governance copy · founder review</p><h2>The brain is online.<br /><em>The body is coming.</em></h2></div><div><p>Myth may widen the horizon. It may never falsify the ground beneath us. Explore the philosophy and constitutional record that keeps Wolverines recognisable across every room.</p><Link className="button button-light" href="/philosophy">Open Book I <span>↗</span></Link></div></section>
+    <footer className="foot"><p>Wolverines Eye · Webi3 Quantum Lab · Aotearoa New Zealand</p><p>Stewardship outlives ownership.</p></footer>
+  </main>;
 }
