@@ -1,90 +1,57 @@
 import Link from "next/link";
 
-const doors = [
-  { href: "/music", label: "Music", blurb: "Wolverines Music — sound and release culture." },
-  { href: "/art", label: "Art", blurb: "Visual works and restrained marks." },
-  { href: "/philosophy", label: "Philosophy", blurb: "WOS covenant — identity before scale." },
-  { href: "/archive", label: "Archive", blurb: "Memory kept inspectable." },
-  { href: "/webi3", label: "Webi3", blurb: "Company OS / Quantum Lab door." },
-  { href: "/lab", label: "Lab", blurb: "Research surfaces — evidence over hype." },
-  { href: "/about", label: "About", blurb: "The story, held in stewardship." },
-  { href: "/contact", label: "Contact", blurb: "The next door — humans hold the keys." },
+const principles = [
+  ["01", "Identity over trends"],
+  ["02", "Timelessness over convenience"],
+  ["03", "Luxury through restraint"],
+  ["04", "Story before aesthetics"],
+  ["05", "Consistency compounds"],
+  ["06", "Technology serves creativity"],
+  ["07", "Build for decades"],
 ] as const;
 
-const stack = [
-  { name: "Wolverines Eye", role: "Culture & IP" },
-  { name: "Webi3", role: "Company OS · Quantum Lab NZ" },
-  { name: "ShoX ($hoX)", role: "Governed intelligence" },
-  { name: "ibCode", role: "Builder layer · since 1983" },
+const atmospheres = ["Quiet confidence", "Wonder", "Presence", "Dignity", "Hope"];
+
+const doors = [
+  ["Music", "Sound as memory.", "/music"],
+  ["Art", "Images with a reason to exist.", "/art"],
+  ["Webi3", "The company operating layer.", "/webi3"],
+  ["Archive", "What deserves to survive.", "/archive"],
 ] as const;
 
 export default function Home() {
   return (
     <main className="site">
       <header className="top">
-        <p className="mark">Wolverines Eye</p>
-        <nav aria-label="Primary">
-          {doors.slice(0, 4).map((d) => (
-            <Link key={d.href} href={d.href}>
-              {d.label}
-            </Link>
-          ))}
-        </nav>
+        <Link className="mark" href="/">Wolverines<span>Eye</span></Link>
+        <nav aria-label="Primary"><a href="#philosophy">Philosophy</a><a href="#doors">Explore</a><a href="#archive">Archive</a></nav>
+        <span className="edition">BOOK I / 0.1</span>
       </header>
 
-      <section className="hero">
-        <p className="eyebrow">Canonical front door</p>
-        <h1>WolverinesEye.com</h1>
-        <p className="lede">
-          The culture and IP door of the Wolverines Eye ecosystem — identity over
-          trends, stewardship over spectacle, technology in service of creativity.
-        </p>
-      </section>
-
-      <section className="stack" aria-labelledby="stack-title">
-        <h2 id="stack-title">Ecosystem map</h2>
-        <ul>
-          {stack.map((s) => (
-            <li key={s.name}>
-              <strong>{s.name}</strong>
-              <span>{s.role}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="note">
-          Product and host spellings stay separate. Humans hold signing authority.
-          Checksums are not signatures.
-        </p>
-      </section>
-
-      <section className="doors" aria-labelledby="doors-title">
-        <h2 id="doors-title">Doors</h2>
-        <div className="grid">
-          {doors.map((d) => (
-            <Link key={d.href} href={d.href} className="card">
-              <h3>{d.label}</h3>
-              <p>{d.blurb}</p>
-            </Link>
-          ))}
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-copy">
+          <p className="eyebrow">A living culture &amp; IP house · Aotearoa New Zealand</p>
+          <h1 id="hero-title">Make work<br /><em>that endures.</em></h1>
+          <p className="lede">Wolverines is a home for music, art, technology and ideas held in trust. We make with identity, restraint and a long memory.</p>
+          <div className="hero-actions"><Link className="button button-primary" href="/philosophy">Read the philosophy <span>↗</span></Link><a className="text-link" href="#doors">Enter the house <span>↓</span></a></div>
         </div>
+        <div className="hero-mark" aria-hidden="true"><span>W</span><small>THE WITNESS</small></div>
       </section>
 
-      <section className="mantras" aria-label="WOS mantras">
-        <p>CODE AS LAW</p>
-        <p>TRUST BY DESIGN</p>
-        <p>EVERY ACTION LOGGED</p>
-        <p>EVERY DECISION VERIFIED</p>
+      <section className="signal" aria-label="Wolverines statement"><p>IDENTITY</p><span>×</span><p>CRAFT</p><span>×</span><p>STEWARDSHIP</p></section>
+
+      <section className="philosophy" id="philosophy" aria-labelledby="philosophy-title">
+        <div className="section-label"><span>01</span><span>THE FOUNDATION</span></div>
+        <div className="philosophy-grid"><div><h2 id="philosophy-title">A point of view<br />before a <em>point of sale.</em></h2><p className="body-copy">The wolf is never the hero; it is the witness. Every piece begins with a human centre, then earns its surface through care.</p></div><div className="principles">{principles.map(([number, text]) => <div className="principle" key={number}><span>{number}</span><strong>{text}</strong></div>)}</div></div>
       </section>
 
-      <footer className="foot">
-        <p>
-          Wolverines Eye Limited · Aotearoa New Zealand · Stewardship outlives
-          ownership.
-        </p>
-        <p className="quiet">
-          Experimental policy gate lives server-side — not a claim of Gate close.
-        </p>
-      </footer>
+      <section className="atmosphere" aria-labelledby="atmosphere-title"><div className="section-label"><span>02</span><span>THE FEELING</span></div><div className="atmosphere-heading"><h2 id="atmosphere-title">How the work<br /><em>should feel.</em></h2><p>Five atmospheres guide the work. Not a moodboard — a standard.</p></div><div className="atmosphere-list">{atmospheres.map((item, index) => <div key={item}><span>0{index + 1}</span><strong>{item}</strong><i>↗</i></div>)}</div></section>
+
+      <section className="doors" id="doors" aria-labelledby="doors-title"><div className="section-label"><span>03</span><span>THE HOUSE</span></div><div className="doors-heading"><h2 id="doors-title">Different rooms.<br /><em>One character.</em></h2><p>Move through the ecosystem. Each door opens to a different form of the same belief.</p></div><div className="door-grid">{doors.map(([label, blurb, href], index) => <Link href={href} className="door-card" key={label}><span>0{index + 1}</span><h3>{label}</h3><p>{blurb}</p><b>↗</b></Link>)}</div></section>
+
+      <section className="archive" id="archive" aria-labelledby="archive-title"><div><p className="eyebrow">A book held in trust · Review edition 0.1</p><h2 id="archive-title">Read what<br /><em>must survive.</em></h2></div><div><p>The Philosophy is our first record of why the work exists, what it owes to people, and what should remain true when the tools change.</p><Link className="button button-light" href="/philosophy">Open Book I <span>↗</span></Link></div></section>
+
+      <footer className="foot"><p>Wolverines Eye Limited <span>·</span> Aotearoa New Zealand</p><p>Stewardship outlives ownership.</p></footer>
     </main>
   );
 }

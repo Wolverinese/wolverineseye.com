@@ -2,9 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Wolverines Eye",
+  title: "Wolverines Eye — Make work that endures.",
   description:
-    "The canonical culture and IP front door of the Wolverines Eye ecosystem.",
+    "A living culture and IP house for music, art, technology and ideas held in trust.",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#e8e5dc",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
